@@ -13,13 +13,9 @@ def main():
         print(f"#{i+1}: {server}")
         print()
     friends = FriendsList()
-    print(f"Your saved friends are: {friends.friends_list}")
-    print()
-    friends_found = friends.loose_search_servers(server_list)
-    for thing in friends_found:
-        print(thing)
-    
-
+    matches = friends.tight_search(server_list)
+    for match in matches:
+        print(match)
 
 if __name__ == "__main__":
     main()
