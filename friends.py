@@ -16,9 +16,9 @@ class FriendMatch:
 
 class FriendsList:
 
-    def __init__(self):
+    def __init__(self, filename="friends.csv"):
         self.friends = {}
-        with open("friends.csv", "r") as f:
+        with open(filename, "r") as f:
             reader = csv.reader(f)
             next(reader) #skip the header row
             for row in reader:
