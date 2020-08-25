@@ -10,5 +10,3 @@ searched for when the program runs.
 Simply run main.py and look at the console output. If you want to make changes, feel free to. Run tests.py to make sure you don't break any existing code.
 
 
-
-***There must be a header line in friends.csv***
