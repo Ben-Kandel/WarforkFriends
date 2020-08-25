@@ -30,7 +30,7 @@ class TestProject(unittest.TestCase):
 
     def test_friends(self):
         #testing clean_strings:
-        FL = friends.FriendsList("tests/test1.csv")
+        FL = friends.FriendsList("test1.csv")
         data = ["HELLO","hEllO","    Hello   "]
         self.assertEqual(FL.clean_strings(data), ["hello", "hello", "hello"]) #test lower() and strip() part
         data = ["he.llo", "hell||o", "  $he$llo$.#$^"]
@@ -47,7 +47,7 @@ class TestProject(unittest.TestCase):
         #testing loading/saving of friends list
         answer = {"Player" : [], "Player1" : [], "Player2" : []}
         self.assertEqual(FL.friends, answer) #testing with no extra aliases in friends
-        FL2 = friends.FriendsList("tests/test2.csv")
+        FL2 = friends.FriendsList("test2.csv")
         answer = {"Player" : ["other_name", "lolol"], "Player1" : [], "Player2" : ["PlayerTwo", "PlayerToo"]}
         self.assertEqual(FL2.friends, answer) #testing with some aliases
 

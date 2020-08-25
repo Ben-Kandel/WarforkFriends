@@ -2,7 +2,7 @@ from scraper import Scraper, Server
 from friends import FriendsList
 
 
-def main():
+def main(): 
     print("Gathering data from livesow.net/livefork, give me a few seconds...", end="")
     scraper = Scraper()
     server_list = scraper.scrape_servers()
