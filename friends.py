@@ -51,8 +51,30 @@ class FriendsList:
                                 matches.append(FriendMatch(server.name, k, other_name=alias))
                                 break #dont need to check the rest of the aliases
         return matches
+    
+    def loose_search(self, server_list):
 
+
+        matches = []
+        #so we need a method to fix up strings in lists. like removing punctuation
+
+        return matches
+
+    def clean_strings(self, string_list):
+        #takes a string, removes leading/trailing whitespace, and removes all punctuation
+        answer = []
+        for thing in string_list:
+            thing = thing.strip()
+            if thing: #if there any characters left after doing .strip()
+                thing = thing.lower()
+                no_punc = thing.translate(thing.maketrans('', '', punctuation))
+                if no_punc:
+                    answer.append(no_punc)
+                else:
+                    answer.append(thing)
+        return answer
 
 if __name__ == "__main__":
     friends = FriendsList()
-    friends.print_friends()
+    answer = friends.clean_strings(["Hello", " Hello ", "|||Spoo.$#n@@)#*)!@#%&"])
+    print(answer)

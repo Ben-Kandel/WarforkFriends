@@ -29,20 +29,28 @@ class TestProject(unittest.TestCase):
         self.assertEqual(test_list, ["Dino(1)"]) #remove_bots does not recognize number suffixes
 
     def test_friends(self):
-        pass
-        """ fl = friends.FriendsList()
-        fl.friends_list.clear()
-        fl.add_friend("Minionsman")
-        self.assertEqual(fl.friends_list, ["Minionsman"]) #check adding friend
-        fl.add_friend("tintifax")
-        self.assertEqual(fl.friends_list, ["Minionsman", "tintifax"]) #check adding another friend
-        fl.add_friend("Minionsman")
-        self.assertEqual(fl.friends_list, ["Minionsman", "tintifax"]) #check adding duplicate
-        fl.remove_friend("Minionsman")
-        self.assertEqual(fl.friends_list, ["tintifax"]) #check removing friend
-        fl.remove_friend("doesn't exist")
-        self.assertEqual(fl.friends_list, ["tintifax"]) #check removing a non-existent friend
-         """
+        #testing clean_strings:
+        FL = friends.FriendsList("tests/test1.csv")
+        data = ["HELLO","hEllO","    Hello   "]
+        self.assertEqual(FL.clean_strings(data), ["hello", "hello", "hello"]) #test lower() and strip() part
+        data = ["he.llo", "hell||o", "  $he$llo$.#$^"]
+        self.assertEqual(FL.clean_strings(data), ["hello", "hello", "hello"]) #test removing punctuation
+        data = []
+        self.assertEqual(FL.clean_strings(data), []) #check with empty list
+        data = ["", "    "]
+        self.assertEqual(FL.clean_strings(data), []) #check that pure whitespace strings are removed
+        data = ["$$(#$(^"]
+        self.assertEqual(FL.clean_strings(data), ["$$(#$(^"]) #check that a pure punctuation name is not reduced to an empty string
+        data = ["$$$$$$$", "   he$$$$$$llo dude!", "   "]
+        self.assertEqual(FL.clean_strings(data), ["$$$$$$$", "hello dude"]) #does it all work together?
+
+        #testing loading/saving of friends list
+        answer = {"Player" : [], "Player1" : [], "Player2" : []}
+        self.assertEqual(FL.friends, answer) #testing with no extra aliases in friends
+        FL2 = friends.FriendsList("tests/test2.csv")
+        answer = {"Player" : ["other_name", "lolol"], "Player1" : [], "Player2" : ["PlayerTwo", "PlayerToo"]}
+        self.assertEqual(FL2.friends, answer) #testing with some aliases
+
     def test_servers(self):
         s1 = scraper.Server("Server1", 0, [])
         self.assertTrue(s1.is_empty()) #check that it is indeed empty

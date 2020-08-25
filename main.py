@@ -9,9 +9,13 @@ def main():
     print("done.")
     print()
     server_list = scraper.clean_server_list(server_list)
-    for i, server in enumerate(server_list):
-        print(f"#{i+1}: {server}")
-        print()
+    if server_list:
+        for i, server in enumerate(server_list):
+            print(f"#{i+1}: {server}")
+            print()
+    else:
+        print("There are no players online Warfork.")
+        return
     friends = FriendsList()
     matches = friends.tight_search(server_list)
     for match in matches:
