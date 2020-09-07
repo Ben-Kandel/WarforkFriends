@@ -1,13 +1,15 @@
 from string import punctuation
 import csv
+import copy
 
 class FriendMatch:
 
-    def __init__(self, server_name, friend_name, other_name=""):
+    def __init__(self, server_name, friend_name, server_index, other_name=""):
         self.server_name = server_name
         self.friend_name = friend_name
         self.other_name = other_name
-
+        self.index = server_index
+        
     def __str__(self):
         if self.other_name:
             return f"I found {self.friend_name} playing on {self.server_name}, using the alias {self.other_name}."
@@ -38,27 +40,30 @@ class FriendsList:
         for k,v in self.friends.items():
                 writer.writerow([k] + v)
 
-    def tight_search(self, server_list):
+
+    def _search(self, server_list, friend_dict):
         matches = []
-        for server in server_list:
+        for i,server in enumerate(server_list):
             if server.player_list: #if the player list isn't empty
-                for k,v in self.friends.items():
-                    if k in server.player_list: #check if real name is in
-                        matches.append(FriendMatch(server.name, k))
+                for k,v in friend_dict.items():
+                    if k in server.player_list:
+                        matches.append(FriendMatch(server.name, k, i))
                     else:
                         for alias in v:
                             if alias in server.player_list:
-                                matches.append(FriendMatch(server.name, k, other_name=alias))
-                                break #dont need to check the rest of the aliases
+                                matches.append(FriendMatch(server.name, k, i, other_name=alias))
+                                break
         return matches
+
+    def tight_search(self, server_list):
+        return self._search(server_list, self.friends)
     
     def loose_search(self, server_list):
-
-
-        matches = []
-        #so we need a method to fix up strings in lists. like removing punctuation
-
-        return matches
+        #we have clean_strings(), let's use it!
+        new_dict = {}
+        for k,v in self.friends.items():
+            new_dict[k] = self.clean_strings(v)
+        return self._search(server_list, new_dict)
 
     def clean_strings(self, string_list):
         #takes a string, removes leading/trailing whitespace, and removes all punctuation

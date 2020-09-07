@@ -61,6 +61,12 @@ class Server:
 class Scraper:
     def __init__(self):
         self._session = HTMLSession()
+        #self.load_page()
+        # self._resp = self._session.get("http://livesow.net/livefork")
+        # self._resp.html.render(timeout=0, sleep=8) #wait some time for things to load
+        # self._soup = BeautifulSoup(self._resp.html.html, "html.parser")
+    
+    def load_page(self):
         self._resp = self._session.get("http://livesow.net/livefork")
         self._resp.html.render(timeout=0, sleep=8) #wait some time for things to load
         self._soup = BeautifulSoup(self._resp.html.html, "html.parser")
