@@ -1,3 +1,6 @@
+![Python application](https://github.com/Ben-Kandel/WarforkFriends/workflows/Python%20application/badge.svg?branch=master)
+
+
 # WarforkFriends
 See which of your friends are currently playing Warfork!
 
