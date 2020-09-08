@@ -1,6 +1,7 @@
 import unittest
 import scraper
 import friends
+from bs4 import BeautifulSoup
 
 class TestProject(unittest.TestCase):
 
@@ -69,6 +70,33 @@ class TestProject(unittest.TestCase):
         self.assertTrue(s4.is_only_bots()) #check only bots with number suffixes
         s5 = scraper.Server("Server5", 3, ["Wallie", "Wallie(2)", "Mama(2323)", "Dino(9)", "Player"])
         self.assertFalse(s5.is_only_bots()) #check with one player and bots with number suffixes
+
+    def test_scraper(self):
+        
+        def assert_things(server, e_name, e_gm, e_map, e_player_list):
+            self.assertEqual(server.name, e_name)
+            self.assertEqual(server.gamemode, e_gm)
+            self.assertEqual(server.map, e_map)
+            self.assertEqual(server.player_list, e_player_list)
+        
+        #this file contains servers in the same layout as livesow.net/livefork
+        #this lets us test our scraper with known data to see if it is working
+        with open("tests/testservers.html", "r") as f:
+            contents = f.read()
+            sp = scraper.Scraper()
+            sp._soup = BeautifulSoup(contents, "html.parser")
+            server_list = sp.scrape_servers()
+            #testing that we gathered information correctly:
+            assert_things(server_list[0], "Test1", "ffa", "wfdm1", ["Name1", "Name2", "Name3", "Name4", "Name5", "Name6"])
+            assert_things(server_list[1], "Test2", "nca", "wfca1", ["NightBot", "Name1", "Name2"])
+            assert_things(server_list[2], "Test3", "ffa", "wfdm11", ["Maddie", "Oscar", "Dyllan", "Mama", "Biscuit", "Mama(1)"])
+            #testing bot-related things:
+            self.assertFalse(server_list[0].is_only_bots())
+            self.assertFalse(server_list[1].is_only_bots())
+            self.assertTrue(server_list[2].is_only_bots())
+            self.assertTrue(server_list[0].get_bot_count() == 0)
+            self.assertTrue(server_list[1].get_bot_count() == 1)
+            self.assertTrue(server_list[2].get_bot_count() == 6)
 
 if __name__ == "__main__":
     unittest.main()
