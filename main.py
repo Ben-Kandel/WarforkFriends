@@ -20,8 +20,12 @@ def make_server_win(server_list):
         return True
 
     data = []
-    for server in server_list:
-        data.append([server.name, server.map, server.gamemode, server.player_list])
+    #crashes when there are no players online btw.
+    if server_list:
+        for server in server_list:
+            data.append([server.name, server.map, server.gamemode, server.player_list])
+    else:
+        data = ["There are no players online Warfork.", "None", "None", "None"]
     header = ["Server Name", "Map", "Gamemode", "Players"]
     tbl = sg.Table(values=data, headings=header, k="ServerList",
                    row_height=25,
@@ -29,11 +33,12 @@ def make_server_win(server_list):
                    background_color="light blue",
                    header_background_color="light blue",
                    text_color="black",
+                   selected_row_colors="black on green",
                    num_rows=len(data),
                    hide_vertical_scroll=should_hide_vertical_scroll(data))
     layout = [[sg.Text("Here is what I found...")],
               [tbl],
-              [sg.Text("Find Friend:"), sg.InputText(do_not_clear=False, key="friend_name"), sg.Button("Search", key="FIND_FRIEND")]]
+              [sg.Text("Servers with friends in them are highlighted in green.", key="FRIEND_STATUS")]]
     return sg.Window("Server List", layout, finalize=True, size=(600,500))
 
 def main():
@@ -51,15 +56,29 @@ def main():
             elif window == main_win: #if closing the main window,
                 break #close everything
         elif event == "FETCH_SERVERS":
+
+            def get_friend_rows(loose, tight):
+                if loose: #if there were any matches,
+                    return [x.index for x in loose]
+                elif tight:
+                    return [x.index for x in tight]
+                else:
+                    return None #don't select any rows.
+
             scraper.load_page()
             server_list = get_servers(scraper)
             server_win = make_server_win(server_list)
-        elif event == "FIND_FRIEND":
-            friend_name = values["friend_name"]
-            # matches = friends.tight_search(server_list)
-            # table = window["ServerList"]
+            
+            loose_matches = friends_list.loose_search(server_list)
+            tight_matches = friends_list.tight_search(server_list)
+            indices = get_friend_rows(loose_matches, tight_matches)
+            server_win["ServerList"].Update(select_rows=indices) #update the table
+            if indices:
+                server_win["FRIEND_STATUS"].Update(value="Servers with friends in them are highlighted in green.")
+            else:
+                server_win["FRIEND_STATUS"].Update(value="There are no friends online.")
         else:
-            print("idk")
+            print("Event not recognized.")
 
     main_win.close()
 
