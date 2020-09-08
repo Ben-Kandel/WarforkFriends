@@ -1,12 +1,9 @@
 # WarforkFriends
 See which of your friends are currently playing Warfork!
 
-Scrapes www.livesow.net/livefork for player data. The resulting list is written to the console, ignoring servers with 0 human players.
-Player count vs. bot count are kept track of, and the list will contain the numbers of both.
+Scrapes www.livesow.net/livefork for player data. Pressing the "fetch" button will show you the server list. There is a wait time of 8 seconds to allow the javascript elements to load.
+Servers with 0 human players are ignored.
 
-Keep a list of friends in the friends.csv file! Supports multiple aliases for your friends, in case they are playing under a different name. Your friends are automatically
-searched for when the program runs.
-
-Simply run main.py and look at the console output. If you want to make changes, feel free to. Run tests.py to make sure you don't break any existing code.
+friends.csv contains a list of your friends, supporting optional extra aliases. You can search for your friends to see if their names are in the server list.
 
 
